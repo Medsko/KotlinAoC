@@ -1,7 +1,7 @@
 package aoc2019.solutions
 
-import aoc2019.util.OrbitalObject
-import org.junit.jupiter.api.Test
+import aoc2019.dao.OrbitalObject
+import org.junit.Test
 import util.FileConstants
 import java.io.File
 import kotlin.test.assertEquals
@@ -101,8 +101,16 @@ class Day06OrbitMap {
 		val orbitalRelations = HashMap<String, OrbitalObject>()
 		File(inputFile).forEachLine {
 			val objects = it.split(")")
-			val parent = orbitalRelations.computeIfAbsent(objects[0]) { OrbitalObject(objects[0]) }
-			val child = orbitalRelations.computeIfAbsent(objects[1]) { OrbitalObject(objects[1]) }
+			val parent = orbitalRelations.computeIfAbsent(objects[0]) {
+				OrbitalObject(
+					objects[0]
+				)
+			}
+			val child = orbitalRelations.computeIfAbsent(objects[1]) {
+				OrbitalObject(
+					objects[1]
+				)
+			}
 			parent.children.add(child)
 			child.parent = parent
 		}

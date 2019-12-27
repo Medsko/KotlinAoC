@@ -6,6 +6,9 @@ import org.junit.runners.Suite
 
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
-	Day02Opcodes::class
+	Day01FuelRequirements::class,
+	IntcodeComputerTestSuite::class,
+	Day04SecureContainer::class,
+	Day06OrbitMap::class
 )
 class TestSuite

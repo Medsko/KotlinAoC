@@ -1,5 +1,6 @@
 package aoc2019.util
 
+import aoc2019.dao.IntcodeInstruction
 import java.util.*
 import kotlin.math.abs
 
@@ -25,7 +26,6 @@ class IntcodeComputer() {
 		while (exitCode > -1) {
 			executeInstruction()
 		}
-		println("Pausing/halting program with exit code: $exitCode")
 	}
 
 	fun continueProgram() {
@@ -33,7 +33,6 @@ class IntcodeComputer() {
 		while (exitCode > -1) {
 			executeInstruction()
 		}
-		println("Pausing/halting program with exit code: $exitCode")
 	}
 
 	private fun executeInstruction() {

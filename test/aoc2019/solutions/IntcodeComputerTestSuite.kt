@@ -1,4 +1,4 @@
-package aoc2019.util
+package aoc2019.solutions
 
 import aoc2019.solutions.Day02Opcodes
 import aoc2019.solutions.Day05IncodeDiagnostics
