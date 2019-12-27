@@ -25,7 +25,16 @@ object FileConstants {
 		return Files.notExists(filePath) || Files.exists(filePath)
 	}
 
-
+	/**
+	 * Reads an intcode program from the given file, and returns it as an array of integer instructions.
+	 */
+	fun readProgramInput(inputFile: String): Array<Int> {
+		val rawInput = ArrayList<String>()
+		File(inputFile).forEachLine {
+			rawInput.addAll(it.split(","))
+		}
+		return rawInput.map { Integer.parseInt(it) }.toTypedArray()
+	}
 }
 
 fun main() {
