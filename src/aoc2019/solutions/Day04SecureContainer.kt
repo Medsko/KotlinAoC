@@ -2,7 +2,7 @@ package aoc2019.solutions
 
 
 fun main() {
-	//
+
 	val regexA = "(\\d)\\1".toRegex()
 
 	val atLeastTwo: (Int)->Boolean = { count -> count >= 2 }
@@ -15,15 +15,16 @@ fun main() {
 		println("$testPassword is a valid password: ${isValidPassword(testPassword, exactlyTwo)}")
 	}
 
+	val range = Pair(178416, 676461)
 	// Answers
-	println("Number of unique valid passwords part A: ${findValidPasswords(atLeastTwo).size}")
-	println("Number of unique valid passwords part B: ${findValidPasswords(exactlyTwo).size}")
+	println("Number of unique valid passwords part A: ${findValidPasswords(range, atLeastTwo).size}")
+	println("Number of unique valid passwords part B: ${findValidPasswords(range, exactlyTwo).size}")
 }
 
-fun findValidPasswords(countTest: (Int)-> Boolean): ArrayList<Int> {
+fun findValidPasswords(range: Pair<Int, Int>, countTest: (Int)-> Boolean): ArrayList<Int> {
 	val validPasswords = ArrayList<Int>()
 	// Puzzle input: range from 178416 up to and including 676461.
-	for (password in 178416..676461) {
+	for (password in range.first..range.second) {
 		if (isValidPassword(password, countTest)) {
 			validPasswords.add(password)
 		}
