@@ -29,11 +29,18 @@ object FileConstants {
 	 * Reads an intcode program from the given file, and returns it as an array of integer instructions.
 	 */
 	fun readProgramInput(inputFile: String): Array<Int> {
+		return readProgramInputLong(inputFile).map { it.toInt() }.toTypedArray()
+	}
+
+	/**
+	 * Reads an intcode program from the given file, and returns it as an array of long instructions.
+	 */
+	fun readProgramInputLong(inputFile: String): Array<Long> {
 		val rawInput = ArrayList<String>()
 		File(inputFile).forEachLine {
 			rawInput.addAll(it.split(","))
 		}
-		return rawInput.map { Integer.parseInt(it) }.toTypedArray()
+		return rawInput.map { it.toLong() }.toTypedArray()
 	}
 }
 

@@ -39,7 +39,7 @@ class Day02Opcodes {
 				programVersion[2] = second
 				computer.startProgram(programVersion)
 
-				if (programVersion[0] == targetOutcome) {
+				if (computer.getValueAtPostionZero() == targetOutcome) {
 					winningNoun = first
 					winningVerb = second
 					break
@@ -60,7 +60,7 @@ class Day02Opcodes {
 		computer.restoreProgramToAlarmState(program)
 		computer.startProgram(program)
 		println("Value at position 0 after running program: ${program[0]}")
-		return program[0]
+		return computer.getValueAtPostionZero()
 	}
 
 	private fun testA(): Int {
@@ -69,7 +69,7 @@ class Day02Opcodes {
 		computer.startProgram(program)
 		println("Value at position 0 after running program: ${program[0]}")
 		println("Program state: ${program.contentToString()}")
-		return program[0]
+		return computer.getValueAtPostionZero()
 	}
 
 	private fun readInput(inputFile: String): Array<Int> {

@@ -10,6 +10,7 @@ import org.junit.runners.Suite
 @Suite.SuiteClasses(
 	Day02Opcodes::class,
 	Day05IncodeDiagnostics::class,
-	Day07AmplificationCircuit::class
+	Day07AmplificationCircuit::class,
+	Day09SensorBoost::class
 )
 class IntcodeComputerTestSuite

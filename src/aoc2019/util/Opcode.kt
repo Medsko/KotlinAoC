@@ -24,13 +24,17 @@ enum class Opcode(val intCode: Int, val parameters: Int) {
 	// If the first parameter is equal to the second parameter, it stores 1 in the position given by the third
 	// parameter. Otherwise, it stores 0.
 	EQUALS(8, 3),
+	// Adjusts the relative base by the value of its only parameter.
+	RELATIVE_BASE_OFFSET(9, 1),
 
 	ERROR(-1, 0);
 
-	fun fromIntCode(intCode: Int) : Opcode {
-		for (opcode in values()) {
-			if (opcode.intCode == intCode) return opcode
+	companion object Factory {
+		fun fromCode(intCode: Int): Opcode {
+			for (opcode in values()) {
+				if (opcode.intCode == intCode) return opcode
+			}
+			return ERROR
 		}
-		return ERROR
 	}
 }
