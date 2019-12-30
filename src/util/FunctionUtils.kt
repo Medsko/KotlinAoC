@@ -2,6 +2,7 @@ package util
 
 import java.util.*
 import kotlin.math.abs
+import kotlin.math.atan2
 
 object FunctionUtils {
 	val hash = 35
@@ -37,6 +38,13 @@ object FunctionUtils {
 		// Filter out all incomplete permutations.
 		val maxSize = permutations.maxBy { it.size }?.size
 		return permutations.filter { it.size == maxSize }
+	}
+
+	fun angleBetweenPoints(start: Pair<Int, Int>, target: Pair<Int, Int>, invertedY: Boolean): Double {
+		val yDelta = if (invertedY) start.second - target.second else target.second - start.second
+		val xDelta = target.first - start.first
+		val angle = Math.toDegrees(atan2(xDelta.toDouble(), yDelta.toDouble()))
+		return if (angle < 0) 360 + angle else angle
 	}
 
 }
