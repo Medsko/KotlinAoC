@@ -2,6 +2,7 @@ package aoc2019.solutions
 
 import org.junit.Test
 import util.FileConstants
+import util.MatrixUtils
 import java.io.File
 import java.util.*
 import kotlin.test.assertEquals
@@ -11,19 +12,14 @@ class Day08SpaceImageFormatDecoder {
 
 	private val inputFile = FileConstants.INPUT_DIR_2019 + "inputDay8.txt"
 
-	val WHITE_FOREGROUND = "\u001B[37m"
-	val BLACK_BACKGROUND = "\u001B[40m"
-	val WHITE_BACKGROUND = "\u001B[47m"
-
-	val COLOR_RESET = "\u001B[0m"
-
 	@Test
 	fun challengeB() {
 		val pixels = readInput(inputFile)
 		val imageLayers = pixelsToImageLayers(pixels, 25, 6)
 		val finalImage = determineFinalImage(imageLayers, createImageLayer(25, 6))
 		finalImage.forEach { it.reverse() }
-		printImage(finalImage.reversedArray())
+		println("Final image: ")
+		MatrixUtils.printImage(finalImage.reversedArray())
 		// Prints 'CEKUA'
 		val topRow = arrayOf(0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0)
 		assertTrue(topRow.contentDeepEquals(finalImage.reversedArray()[0]))
@@ -35,7 +31,8 @@ class Day08SpaceImageFormatDecoder {
 		val pixels = splitInput(imageData)
 		val imageLayers = pixelsToImageLayers(pixels, 2, 2)
 		val finalImage = determineFinalImage(imageLayers, createImageLayer(2, 2))
-		printImage(finalImage)
+		println("Final image: ")
+		MatrixUtils.printImage(finalImage)
 	}
 
 	@Test
@@ -64,29 +61,12 @@ class Day08SpaceImageFormatDecoder {
 		assertEquals(2, oneCount * twoCount)
 	}
 
-	/**
-	 * Prints the given image to the console. If the value of a cell is 0, that pixel is printed black.
-	 * If the value is 1, that pixel is printed in 'white'.
-	 */
-	private fun printImage(image: Array<Array<Int>>) {
-		println("Final image: ")
-		for (row in image) {
-			var currentRow = ""
-			for (cell in row) {
-				if (cell == 0) currentRow += BLACK_BACKGROUND
-				else currentRow += WHITE_BACKGROUND + WHITE_FOREGROUND
-				currentRow += cell
-				currentRow += COLOR_RESET
-			}
-			println(currentRow)
-		}
-	}
-
 	private fun determineFinalImage(imageLayers: List<Array<Array<Int>>>, finalImage: Array<Array<Int>>): Array<Array<Int>> {
 		imageLayers.reversed().forEach { imageLayer ->
 			imageLayer.indices.forEach { rowIndex ->
 				imageLayer[rowIndex].indices.forEach { cellIndex ->
 					if (finalImage[rowIndex][cellIndex] == 2) {
+						// The overlying cell is transparent. Overwrite it (possibly with another transparent value).
 						finalImage[rowIndex][cellIndex] = imageLayer[rowIndex][cellIndex]
 					}
 				}

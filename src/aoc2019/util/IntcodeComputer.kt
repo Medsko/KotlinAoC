@@ -19,6 +19,10 @@ class IntcodeComputer() {
 		inputs.push(input.toLong())
 	}
 
+	constructor(program: Array<Long>): this() {
+		this.program = program
+	}
+
 	/**
 	 * Overloaded initialization method, for backwards compatibility.
 	 */

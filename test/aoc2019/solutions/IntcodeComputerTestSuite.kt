@@ -1,8 +1,5 @@
 package aoc2019.solutions
 
-import aoc2019.solutions.Day02Opcodes
-import aoc2019.solutions.Day05IncodeDiagnostics
-import aoc2019.solutions.Day07AmplificationCircuit
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
 
@@ -11,6 +8,7 @@ import org.junit.runners.Suite
 	Day02Opcodes::class,
 	Day05IncodeDiagnostics::class,
 	Day07AmplificationCircuit::class,
-	Day09SensorBoost::class
+	Day09SensorBoost::class,
+	Day11SpacePolice::class
 )
 class IntcodeComputerTestSuite
