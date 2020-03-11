@@ -2,12 +2,16 @@ package util
 
 import kotlin.math.abs
 
+
 object MatrixUtils {
 
 	const val WHITE_FOREGROUND = "\u001B[37m"
 	const val BLACK_BACKGROUND = "\u001B[40m"
 	const val WHITE_BACKGROUND = "\u001B[47m"
 	const val COLOR_RESET = "\u001B[0m"
+	const val RED_BACKGROUND = "\u001B[41m"
+	const val GREEN_BACKGROUND = "\u001B[42m"
+	const val YELLOW_BACKGROUND = "\u001B[43m"
 
 	/**
 	 * Prints the given image to the console. If the value of a cell is 0, that pixel is printed black.
@@ -17,8 +21,21 @@ object MatrixUtils {
 		for (row in image) {
 			var currentRow = ""
 			for (cell in row) {
-				if (cell == 0) currentRow += BLACK_BACKGROUND
-				else currentRow += WHITE_BACKGROUND + WHITE_FOREGROUND
+				currentRow += if (cell == 0) BLACK_BACKGROUND
+				else WHITE_BACKGROUND + WHITE_FOREGROUND
+				currentRow += cell
+				currentRow += COLOR_RESET
+			}
+			println(currentRow)
+		}
+	}
+
+	fun printMultiColorImage(image: Array<Array<Int>>, colors: Map<Int, String>) {
+		for (row in image) {
+			var currentRow = ""
+			for (cell in row) {
+				val color = colors[cell] ?: WHITE_BACKGROUND
+				currentRow += color
 				currentRow += cell
 				currentRow += COLOR_RESET
 			}

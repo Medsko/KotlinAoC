@@ -44,6 +44,21 @@ class IntMatrix (private val defaultValue: Int = 0) {
 	fun get(xPos: Int, yPos: Int): Int {
 		return get(Pair(xPos, yPos))
 	}
+
+	fun count(target: Int): Int {
+		return matrix.fold(0) { acc, row -> acc + row.count { it == target } }
+	}
+
+	fun findFirst(target: Int): Pair<Int, Int>? {
+		for (i in 0 until matrix.size) {
+			for (j in 0 until matrix[i].size) {
+				if (get(Pair(j, i)) == target) {
+					return Pair(j, i)
+				}
+			}
+		}
+		return null
+	}
 	
 	fun forEach(action: (field: Int) -> Unit) {
 		totalFields = 0

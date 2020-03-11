@@ -9,6 +9,14 @@ object FunctionUtils {
 	val period = 46
 	val star = 42
 
+	fun greatestCommonDivisor(x: Long, y: Long): Long {
+		return if (y == 0L) x else greatestCommonDivisor(y, x % y)
+	}
+
+	fun leastCommonMultiple(x: Long, y: Long): Long {
+		return x * (y / greatestCommonDivisor(x, y))
+	}
+
 	fun manhattanDistance(start: Pair<Int, Int>, destination: Pair<Int, Int>): Int {
 		return abs(start.first - destination.first) + abs(start.second - destination.second)
 	}
