@@ -1,14 +1,14 @@
 package aoc2019.dao
 
-data class Chemical(val name: String, var batchSize: Int = 0, var totalRequired: Int = 0, var oreRequired: Int = 0) {
+data class Chemical(val name: String, var batchSize: Int = 0, var totalRequired: Long = 0, var oreRequired: Long = 0) {
 
 	val componentsRequired: MutableMap<Chemical, Int> = HashMap()
 
 	val requiredInComponents: MutableSet<Chemical> = HashSet()
 
-	private var totalRequiredWhenCalculateRequiredBatchesCalled = 0
+	private var totalRequiredWhenCalculateRequiredBatchesCalled = 0L
 
-	fun calculateRequiredBatches(): Int {
+	fun calculateRequiredBatches(): Long {
 		if (totalRequiredWhenCalculateRequiredBatchesCalled > 0
 			&& totalRequiredWhenCalculateRequiredBatchesCalled != totalRequired)
 			throw IllegalStateException("calculateRequiredBatches() has already been called before with a different value for totalRequired!")

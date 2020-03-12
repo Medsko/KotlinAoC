@@ -15,8 +15,8 @@ const val TRILLION = 1_000_000_000_000
 class Day14SpaceStoichiometry {
 
 	companion object Judge {
-		private const val ANSWER_A = 857266
-		private const val ANSWER_B = 0
+		private const val ANSWER_A = 857266L
+		private const val ANSWER_B = 2144702L
 	}
 
 	@Test
@@ -24,8 +24,9 @@ class Day14SpaceStoichiometry {
 		for (i in 1..4) {
 			val chemicalFormulas = HashMap<String, Chemical>()
 			val inputFile = "../input/inputDay14Test$i.txt"
-			val goal = readInputFile(inputFile, chemicalFormulas)
-			assertEquals(goal, calculateTotalOreRequired(chemicalFormulas))
+			val expected = readInputFile(inputFile, chemicalFormulas)
+			val actual = calculateTotalOreRequired(chemicalFormulas)
+			assertEquals(expected, actual)
 		}
 	}
 
@@ -35,36 +36,58 @@ class Day14SpaceStoichiometry {
 		val inputFile = "../input/inputDay14.txt"
 		readInputFile(inputFile, chemicalFormulas)
 		val totalOreRequired = calculateTotalOreRequired(chemicalFormulas)
-		println("Max integer value: ${Integer.MAX_VALUE}, answer: $totalOreRequired")
 		assertEquals(ANSWER_A, totalOreRequired)
 	}
 
 	@Test
 	fun testDay14b() {
-		val targetFuelAmount = arrayListOf(82892753, 5586022, 460664)
-
+		val targetFuelAmount = arrayListOf(82892753L, 5586022L, 460664L)
 		for (i in 2..4) {
-			val chemicalFormulas = HashMap<String, Chemical>()
 			val inputFile = "../input/inputDay14Test$i.txt"
 			val goal = targetFuelAmount[i - 2]
-			readInputFile(inputFile, chemicalFormulas)
-			val oreRequiredPerFuel = calculateTotalOreRequired(chemicalFormulas)
-			val maxAmountFuel = (TRILLION + oreRequiredPerFuel -1) / oreRequiredPerFuel
+			val maxAmountFuel = determineMaxFuel(inputFile)
 			println("Max amount of fuel for case $i: $maxAmountFuel, expected: $goal")
-
-
+			assertEquals(goal, maxAmountFuel)
 		}
 	}
 
-	private fun calculateTotalOreRequired(chemicalFormulas: MutableMap<String, Chemical>): Int {
+	@Test
+	fun day14b() {
+		val inputFile = "../input/inputDay14.txt"
+		val maxAmountFuel = determineMaxFuel(inputFile)
+		println("Max amount of fuel: $maxAmountFuel, expected: $ANSWER_B")
+	}
+
+	private fun determineMaxFuel(inputFile: String): Long {
+		var fuelAmount = 0L
+		var oreRequired = 0L
+		var chemicalFormulas = HashMap<String, Chemical>()
+		readInputFile(inputFile, chemicalFormulas)
+		val crudeOreRequirements = calculateTotalOreRequired(chemicalFormulas)
+
+		while (oreRequired < TRILLION) {
+
+			chemicalFormulas = HashMap()
+			readInputFile(inputFile, chemicalFormulas)
+
+			val increment = (TRILLION - oreRequired) / crudeOreRequirements
+			fuelAmount += if (increment > 0) increment else 1
+
+			oreRequired = calculateTotalOreRequired(chemicalFormulas, fuelAmount)
+		}
+		// We kept going until we went OVER a trillion, so take one off.
+		return fuelAmount - 1
+	}
+
+	private fun calculateTotalOreRequired(chemicalFormulas: MutableMap<String, Chemical>, fuelRequired: Long = 1): Long {
 		val targetChemical = chemicalFormulas[ULTIMATE_PRODUCT]
 			?: throw IllegalArgumentException("Fuel chemical formula not specified!")
-		targetChemical.totalRequired = 1
+		targetChemical.totalRequired = fuelRequired
 		determineRequiredQuantities(targetChemical)
 //		println("Chemical requirements tree:")
 //		println(chemicalTreeToString(targetChemical, chemicalFormulas, 0))
 		chemicalFormulas.values.forEach { calculateRequiredOre(it) }
-		return chemicalFormulas.values.fold(0, { acc, chemical -> acc + chemical.oreRequired })
+		return chemicalFormulas.values.fold(0L, { acc, chemical -> acc + chemical.oreRequired })
 	}
 
 	private fun determineRequiredQuantities(chemicalToCreate: Chemical) {
@@ -72,7 +95,7 @@ class Day14SpaceStoichiometry {
 		queue.add(chemicalToCreate)
 		while (queue.isNotEmpty()) {
 			val product = queue.poll()
-			println("Now determining requirements for production of chemical $product")
+//			println("Now determining requirements for production of chemical $product")
 			for (component in product.componentsRequired) {
 				val chemical = component.key
 				chemical.totalRequired += product.calculateRequiredBatches() * component.value
@@ -88,15 +111,15 @@ class Day14SpaceStoichiometry {
 		else chemical.oreRequired = chemical.calculateRequiredBatches() * oreEntry.value
 	}
 
-	private fun readInputFile(inputFile: String, chemicalFormulas: MutableMap<String, Chemical>): Int {
+	private fun readInputFile(inputFile: String, chemicalFormulas: MutableMap<String, Chemical>): Long {
 
-		var goal = 0
+		var goal = 0L
 		val resource = this::class.java.getResource(inputFile) ?: return goal
 
 		resource.readText().reader().readLines().forEach {
 			if (it.startsWith(GOAL_INDICATOR)) {
 				// This is a test case which includes the target amount of ore required.
-				goal = it.split("\\s".toRegex())[1].toInt()
+				goal = it.split("\\s".toRegex())[1].toLong()
 			} else {
 				val nanoFactory = NanoFactory(chemicalFormulas)
 				nanoFactory.processFormula(it)
